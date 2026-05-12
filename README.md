@@ -2,8 +2,8 @@
 
 > Automated CI/CD pipeline that bridges SAP ABAP code with business stakeholders and SAP LeanIX Enterprise Architecture.
 
-[![ABAP Business Bridge Sync](https://img.shields.io/badge/ABAP%20Sync-passing-brightgreen?logo=githubactions&logoColor=white)](../../actions/workflows/abap-sync.yml)
-[![Tests & Quality](https://img.shields.io/badge/Tests%20%26%20Quality-passing-brightgreen?logo=pytest&logoColor=white)](../../actions/workflows/tests.yml)
+[![ABAP Business Bridge Sync](https://img.shields.io/badge/ABAP%20Sync-passing-brightgreen?logo=githubactions&logoColor=white)](https://github.com/roman-zaglauer/abap-business-bridge/actions/workflows/abap-sync.yml)
+[![Tests & Quality](https://img.shields.io/badge/Tests%20%26%20Quality-passing-brightgreen?logo=pytest&logoColor=white)](https://github.com/roman-zaglauer/abap-business-bridge/actions/workflows/tests.yml)
 [![GitHub Marketplace](https://img.shields.io/badge/Marketplace-ABAP%20Business%20Bridge-blue?logo=github)](https://github.com/marketplace/actions/abap-business-bridge)
 
 ## What is this?
