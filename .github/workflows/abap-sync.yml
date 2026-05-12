@@ -1,0 +1,81 @@
+# ============================================================================
+# ABAP Business Bridge - CI/CD Pipeline
+# Bridges technical ABAP code <-> Business stakeholders <-> SAP LeanIX
+#
+# Author: Roman Zaglauer (https://rgz.digital)
+# GitHub: https://github.com/roman-zaglauer/abap-business-bridge
+# ============================================================================
+name: ABAP Business Bridge Sync
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: # manual trigger for testing
+
+permissions:
+  contents: write # commit updated README / metadata back
+  pull-requests: read
+
+concurrency:
+  group: abap-sync-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  PYTHON_VERSION: "3.12"
+
+jobs:
+  abap-bridge:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install Python dependencies
+        run: pip install requests PyYAML
+
+      - name: Generate ABAP metadata
+        run: python scripts/generate_metadata.py
+        env:
+          REPO_ROOT: ${{ github.workspace }}
+
+      - name: Generate AI business summary
+        run: python scripts/copilot_summarize.py
+        env:
+          COPILOT_TOKEN: ${{ secrets.COPILOT_TOKEN }}
+          REPO_ROOT: ${{ github.workspace }}
+
+      - name: Generate changelog via AI
+        run: python scripts/copilot_summarize.py --changelog
+        env:
+          COPILOT_TOKEN: ${{ secrets.COPILOT_TOKEN }}
+          REPO_ROOT: ${{ github.workspace }}
+
+      - name: Update README.md
+        run: python scripts/update_readme.py
+        env:
+          REPO_ROOT: ${{ github.workspace }}
+
+      - name: Sync to SAP LeanIX
+        run: python scripts/leanix_sync.py
+        env:
+          LEANIX_API_TOKEN: ${{ secrets.LEANIX_API_TOKEN }}
+          LEANIX_SUBDOMAIN: ${{ secrets.LEANIX_SUBDOMAIN }}
+          LEANIX_WORKSPACE_ID: ${{ secrets.LEANIX_WORKSPACE_ID }}
+          LEANIX_FACT_SHEET_ID: ${{ secrets.LEANIX_FACT_SHEET_ID }}
+
+      - name: Commit updated artifacts
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add README.md metadata.json
+          git diff --cached --quiet || \
+            git commit -m "chore: sync business summary, metadata & changelog [skip ci]"
+          git push
