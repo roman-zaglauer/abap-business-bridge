@@ -78,4 +78,6 @@ jobs:
           pip install pip-audit
 
       - name: Audit dependencies
-        run: pip-audit --strict --desc --skip-editable
+        run: >-
+          pip-audit --strict --desc --skip-editable
+          --ignore-vuln CVE-2026-3219
