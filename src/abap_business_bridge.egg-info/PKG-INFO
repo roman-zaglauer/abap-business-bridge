@@ -1,0 +1,21 @@
+Metadata-Version: 2.4
+Name: abap-business-bridge
+Version: 1.0.0
+Summary: CI/CD pipeline bridging SAP ABAP code with business stakeholders and SAP LeanIX
+Author-email: Roman Zaglauer <roman@rgz.digital>
+License-Expression: MIT
+Project-URL: Homepage, https://rgz.digital
+Project-URL: Repository, https://github.com/roman-zaglauer/abap-business-bridge
+Project-URL: Issues, https://github.com/roman-zaglauer/abap-business-bridge/issues
+Project-URL: Funding, https://github.com/sponsors/roman-zaglauer
+Requires-Python: >=3.10
+License-File: LICENSE
+Requires-Dist: requests>=2.31
+Requires-Dist: PyYAML>=6.0
+Provides-Extra: dev
+Requires-Dist: pytest>=8.0; extra == "dev"
+Requires-Dist: pytest-cov>=5.0; extra == "dev"
+Requires-Dist: ruff>=0.4; extra == "dev"
+Requires-Dist: mypy>=1.10; extra == "dev"
+Requires-Dist: types-requests>=2.31; extra == "dev"
+Dynamic: license-file

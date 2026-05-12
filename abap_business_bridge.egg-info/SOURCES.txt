@@ -1,0 +1,11 @@
+README.md
+pyproject.toml
+abap_business_bridge.egg-info/PKG-INFO
+abap_business_bridge.egg-info/SOURCES.txt
+abap_business_bridge.egg-info/dependency_links.txt
+abap_business_bridge.egg-info/requires.txt
+abap_business_bridge.egg-info/top_level.txt
+tests/test_copilot_summarize.py
+tests/test_generate_metadata.py
+tests/test_leanix_sync.py
+tests/test_update_readme.py

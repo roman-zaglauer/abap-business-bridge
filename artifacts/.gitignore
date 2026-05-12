@@ -1,0 +1,6 @@
+# Artifacts directory
+# Generated files (business_summary.md, changelog.md) are written here
+# and are NOT committed to the repository.
+*
+!.gitkeep
+!.gitignore

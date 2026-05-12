@@ -1,0 +1,73 @@
+[project]
+name = "abap-business-bridge"
+version = "1.0.0"
+description = "CI/CD pipeline bridging SAP ABAP code with business stakeholders and SAP LeanIX"
+requires-python = ">=3.10"
+license = "MIT"
+authors = [
+    { name = "Roman Zaglauer", email = "roman@rgz.digital" },
+]
+dependencies = [
+    "requests>=2.31",
+    "PyYAML>=6.0",
+]
+
+[project.urls]
+Homepage = "https://rgz.digital"
+Repository = "https://github.com/roman-zaglauer/abap-business-bridge"
+Issues = "https://github.com/roman-zaglauer/abap-business-bridge/issues"
+Funding = "https://github.com/sponsors/roman-zaglauer"
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "pytest-cov>=5.0",
+    "ruff>=0.4",
+    "mypy>=1.10",
+    "types-requests>=2.31",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+addopts = [
+    "--strict-markers",
+    "--tb=short",
+    "-q",
+]
+
+[tool.ruff]
+target-version = "py310"
+line-length = 120
+
+[tool.ruff.lint]
+select = [
+    "E",    # pycodestyle errors
+    "W",    # pycodestyle warnings
+    "F",    # pyflakes
+    "I",    # isort
+    "N",    # pep8-naming
+    "UP",   # pyupgrade
+    "B",    # flake8-bugbear
+    "S",    # flake8-bandit (security)
+    "A",    # flake8-builtins
+    "C4",   # flake8-comprehensions
+    "SIM",  # flake8-simplify
+    "TCH",  # flake8-type-checking
+    "RUF",  # ruff-specific
+]
+ignore = [
+    "S603",   # subprocess call - we control the inputs
+    "S607",   # partial executable path - git is expected on PATH
+    "TC003",  # pathlib etc. used at runtime in fixtures/scripts
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S101", "S105", "S107"]  # assert + test credentials fine in tests
+
+[tool.mypy]
+python_version = "3.10"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = false
+check_untyped_defs = true

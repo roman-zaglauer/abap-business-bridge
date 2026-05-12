@@ -1,0 +1,113 @@
+name: "ABAP Business Bridge"
+description: "Bridge SAP ABAP code with business stakeholders via AI summaries, metadata extraction, and SAP LeanIX sync"
+author: "Roman Zaglauer"
+
+branding:
+  icon: "layers"
+  color: "blue"
+
+inputs:
+  copilot-token:
+    description: "GitHub PAT with `copilot` scope for AI-powered business summaries"
+    required: false
+    default: ""
+  leanix-api-token:
+    description: "SAP LeanIX API token for Fact Sheet synchronization"
+    required: false
+    default: ""
+  leanix-subdomain:
+    description: "SAP LeanIX subdomain (e.g. 'acme' for acme.leanix.net)"
+    required: false
+    default: ""
+  leanix-workspace-id:
+    description: "SAP LeanIX workspace UUID"
+    required: false
+    default: ""
+  leanix-fact-sheet-id:
+    description: "UUID of the target LeanIX Fact Sheet (auto-detected if omitted)"
+    required: false
+    default: ""
+  python-version:
+    description: "Python version to use"
+    required: false
+    default: "3.12"
+  auto-commit:
+    description: "Commit updated README.md and metadata.json back to the repo"
+    required: false
+    default: "true"
+
+outputs:
+  total-loc:
+    description: "Total lines of ABAP code found"
+    value: ${{ steps.metadata.outputs.total_loc }}
+  total-objects:
+    description: "Total number of ABAP objects found"
+    value: ${{ steps.metadata.outputs.total_objects }}
+  metadata-path:
+    description: "Path to the generated metadata.json"
+    value: ${{ steps.metadata.outputs.metadata_path }}
+
+runs:
+  using: "composite"
+  steps:
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ inputs.python-version }}
+
+    - name: Install dependencies
+      shell: bash
+      run: pip install requests PyYAML
+
+    - name: Generate ABAP metadata
+      id: metadata
+      shell: bash
+      run: |
+        python "${{ github.action_path }}/scripts/generate_metadata.py"
+        echo "metadata_path=${{ github.workspace }}/metadata.json" >> "$GITHUB_OUTPUT"
+        if [[ -f metadata.json ]]; then
+          echo "total_loc=$(python -c "import json; print(json.load(open('metadata.json'))['total_lines_of_code'])")" >> "$GITHUB_OUTPUT"
+          echo "total_objects=$(python -c "import json; print(json.load(open('metadata.json'))['total_objects'])")" >> "$GITHUB_OUTPUT"
+        fi
+      env:
+        REPO_ROOT: ${{ github.workspace }}
+
+    - name: Generate AI business summary
+      shell: bash
+      run: python "${{ github.action_path }}/scripts/copilot_summarize.py"
+      env:
+        COPILOT_TOKEN: ${{ inputs.copilot-token }}
+        REPO_ROOT: ${{ github.workspace }}
+
+    - name: Generate AI changelog
+      shell: bash
+      run: python "${{ github.action_path }}/scripts/copilot_summarize.py" --changelog
+      env:
+        COPILOT_TOKEN: ${{ inputs.copilot-token }}
+        REPO_ROOT: ${{ github.workspace }}
+
+    - name: Update README.md
+      shell: bash
+      run: python "${{ github.action_path }}/scripts/update_readme.py"
+      env:
+        REPO_ROOT: ${{ github.workspace }}
+
+    - name: Sync to SAP LeanIX
+      shell: bash
+      run: python "${{ github.action_path }}/scripts/leanix_sync.py"
+      env:
+        LEANIX_API_TOKEN: ${{ inputs.leanix-api-token }}
+        LEANIX_SUBDOMAIN: ${{ inputs.leanix-subdomain }}
+        LEANIX_WORKSPACE_ID: ${{ inputs.leanix-workspace-id }}
+        LEANIX_FACT_SHEET_ID: ${{ inputs.leanix-fact-sheet-id }}
+
+    - name: Commit updated artifacts
+      if: inputs.auto-commit == 'true'
+      shell: bash
+      run: |
+        git config user.name  "github-actions[bot]"
+        git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        git add README.md metadata.json
+        git diff --cached --quiet || \
+          git commit -m "chore: sync business summary, metadata & changelog [skip ci]"
+        git push
