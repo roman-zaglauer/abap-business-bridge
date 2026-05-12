@@ -55,7 +55,7 @@ See [docs/ENHANCEMENTS.md](docs/ENHANCEMENTS.md) for advanced ideas (ABAPLint, M
 If you find this action useful, consider supporting its development:
 
 [![Sponsor](https://img.shields.io/badge/Sponsor-roman--zaglauer-ea4aaa?logo=github-sponsors)](https://github.com/sponsors/roman-zaglauer)
-[![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-support-yellow?logo=buymeacoffee)](https://buymeacoffee.com/romanzaglauer)
+[![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-support-yellow?logo=buymeacoffee)](https://buymeacoffee.com/roman.zaglauer)
 
 ## Author
 
