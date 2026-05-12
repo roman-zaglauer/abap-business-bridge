@@ -1,0 +1,28 @@
+{
+  "generated_at": "2026-05-12T12:48:53.055818+00:00",
+  "repository": "roman-zaglauer/abap-business-bridge",
+  "total_lines_of_code": 24,
+  "total_objects": 2,
+  "categories": {
+    "Report": 1,
+    "Class": 1
+  },
+  "lines_of_business": {
+    "Sales & Distribution (SD)": 1,
+    "Finance (FI)": 1
+  },
+  "objects": [
+    {
+      "path": "src/z_sd_sales_report.prog.abap",
+      "type": "Report",
+      "lines_of_code": 6,
+      "line_of_business": "Sales & Distribution (SD)"
+    },
+    {
+      "path": "src/zcl_fi_invoice.clas.abap",
+      "type": "Class",
+      "lines_of_code": 18,
+      "line_of_business": "Finance (FI)"
+    }
+  ]
+}

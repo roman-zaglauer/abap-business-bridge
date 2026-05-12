@@ -33,17 +33,13 @@ See the [Installation & Configuration Guide](docs/SETUP.md).
 ## Business Summary
 
 <!-- BUSINESS_SUMMARY_START -->
-
-_(Business summary will be auto-generated on the next pipeline run.)_
-
+(Copilot summary unavailable - token not configured)
 <!-- BUSINESS_SUMMARY_END -->
 
 ## Changelog
 
 <!-- CHANGELOG_START -->
-
-_(Changelog will be auto-generated on the next pipeline run.)_
-
+(Copilot summary unavailable - token not configured)
 <!-- CHANGELOG_END -->
 
 ## Architecture Enhancements
